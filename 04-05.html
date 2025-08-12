@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>📊 Illustration du diagramme de Pareto</title>
+  <style>
+:root { --font: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; }
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body { font-family: var(--font); margin: 0; color:#111827; background:#f8fafc; }
+.wrap { max-width: 980px; margin: 0 auto; padding: 28px 18px 80px; line-height: 1.6; }
+h1, h2, h3 { line-height: 1.2; margin: 6px 0 10px; }
+h1 { font-size: 28px; }
+h2 { font-size: 22px; }
+h3 { font-size: 18px; }
+.lead { color:#374151; }
+.badge { display:inline-block; padding:4px 10px; border-radius:9999px; background:#eef2ff; color:#3730a3; font-weight:700; font-size:12px; margin-right:6px;}
+.card { background:#fff; border:1px solid #e5e7eb; border-radius:16px; padding:18px 18px; box-shadow: 0 4px 16px rgba(0,0,0,.06); margin-bottom:16px; }
+.note { background:#f9fafb; border:1px solid #e5e7eb; border-radius:12px; padding:12px; }
+.table { width: 100%; border-collapse: collapse; }
+.table th, .table td { border-bottom:1px solid #e5e7eb; padding:8px; text-align:left; vertical-align: top; }
+ul { margin: 8px 0 8px 18px; }
+.kbd { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; background:#f3f4f6; padding:2px 6px; border-radius:6px; }
+.btnbar { position: sticky; bottom: 0; left: 0; right: 0; background: rgba(248,250,252,.9); border-top:1px solid #e5e7eb; display:flex; justify-content:space-between; gap:8px; padding:10px 14px; backdrop-filter: blur(6px); }
+.btn { display:inline-flex; align-items:center; gap:8px; padding:10px 14px; border-radius:12px; border:1px solid #e5e7eb; background:#fff; cursor:pointer; text-decoration:none; color:#111827; font-weight:600; }
+.btn.primary { background:#111827; color:#fff; border-color:#111827; }
+.btn.muted { color:#6b7280; }
+.small { font-size:12px; color:#6b7280; }
+details { background:#f9fafb; border:1px solid #e5e7eb; padding:10px 12px; border-radius:12px; }
+summary { cursor:pointer; font-weight:700; }
+svg { width:100%; background:#fff; border:1px solid #e5e7eb; border-radius:12px; }
+input[type=text], textarea, select { width:100%; padding:10px; border:1px solid #e5e7eb; border-radius:12px; }
+label { display:block; margin:6px 0; }
+hr { border:0; border-top:1px solid #e5e7eb; margin:16px 0; }
+.center { text-align:center; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card"><span class="badge">🟦 Section 4 – (10 minutes)</span><h1>📊 Illustration du diagramme de Pareto</h1>
+<div><button class="btn primary" id="draw">Générer le Pareto</button></div>
+<svg id="chart" viewBox="0 0 900 360" preserveAspectRatio="xMidYMid meet" style="margin-top:8px"></svg>
+<script>
+const svg4=document.getElementById('chart');const pad4={left:60,top:20,right:40,bottom:40};
+function data4(){return[{label:'Manque de temps',value:45},{label:'Peur des effets secondaires',value:30},{label:'Doute sur l’efficacité',value:15},{label:'Aucune offre en quart de nuit',value:7},{label:'Convictions personnelles',value:3}];}
+document.getElementById('draw').addEventListener('click',()=>{
+  const data=data4().sort((a,b)=>b.value-a.value);const total=data.reduce((s,d)=>s+d.value,0);
+  const W=900-pad4.left-pad4.right,H=360-pad4.top-pad4.bottom;svg4.innerHTML='';
+  const g=document.createElementNS('http://www.w3.org/2000/svg','g');g.setAttribute('transform','translate('+pad4.left+','+pad4.top+')');svg4.appendChild(g);
+  const maxV=Math.max(...data.map(d=>d.value));const xStep=W/data.length;
+  g.innerHTML+='<line x1="0" y1="'+H+'" x2="'+W+'" y2="'+H+'" stroke="#9ca3af"/>'+'<line x1="0" y1="0" x2="0" y2="'+H+'" stroke="#9ca3af"/>';
+  data.forEach((d,i)=>{const x=i*xStep+xStep*.15,bw=xStep*.7,h=(d.value/maxV)*(H*.9),y=H-h;
+    const rect=document.createElementNS('http://www.w3.org/2000/svg','rect');rect.setAttribute('x',x);rect.setAttribute('y',y);rect.setAttribute('width',bw);rect.setAttribute('height',h);rect.setAttribute('fill','#93c5fd');g.appendChild(rect);
+    const lbl=document.createElementNS('http://www.w3.org/2000/svg','text');lbl.setAttribute('x',x+bw/2);lbl.setAttribute('y',H+16);lbl.setAttribute('text-anchor','middle');lbl.setAttribute('font-size','12');lbl.textContent=d.label;g.appendChild(lbl);
+  });
+  let cum=0;const pts=[];data.forEach((d,i)=>{cum+=d.value;const cx=i*xStep+xStep/2,cy=H-(cum/total)*(H*.9);pts.push([cx,cy]);});
+  const path=document.createElementNS('http://www.w3.org/2000/svg','path');path.setAttribute('d',pts.map((p,i)=>(i?'L':'M')+p[0]+' '+p[1]).join(' '));path.setAttribute('fill','none');path.setAttribute('stroke','#ef4444');path.setAttribute('stroke-width','2');g.appendChild(path);
+  pts.forEach(p=>{const c=document.createElementNS('http://www.w3.org/2000/svg','circle');c.setAttribute('cx',p[0]);c.setAttribute('cy',p[1]);c.setAttribute('r',4);c.setAttribute('fill','#ef4444');g.appendChild(c);});
+});
+</script>
+</div>
+    <div class="btnbar">
+      <a class="btn" href="index.html">Sommaire</a>
+      <span class="small">Diapo 5 / 7</span>
+      <div>
+        <a class="btn" href="04-04.html">← Précédent</a>
+        <a class="btn primary" href="04-06.html">Suivant →</a>
+      </div>
+    </div>
+  </div>
+<script data-prev="04-04.html" data-next="04-06.html">
+<script>
+(function() {
+  const meta = document.currentScript.dataset;
+  const prev = meta.prev, next = meta.next;
+  function go(url){ if(url) window.location.href = url; }
+  document.addEventListener('keydown', (e) => {
+    if (e.target && (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT')) return;
+    if (e.key === 'ArrowLeft') go(prev);
+    if (e.key === 'ArrowRight') go(next);
+  });
+})();
+</script>
+</script>
+</body>
+</html>

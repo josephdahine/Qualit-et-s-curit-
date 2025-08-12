@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Run chart interactif + question</title>
+  <style>
+:root { --font: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; }
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body { font-family: var(--font); margin: 0; color:#111827; background:#f8fafc; }
+.wrap { max-width: 980px; margin: 0 auto; padding: 28px 18px 80px; line-height: 1.6; }
+h1, h2, h3 { line-height: 1.2; margin: 6px 0 10px; }
+h1 { font-size: 28px; }
+h2 { font-size: 22px; }
+h3 { font-size: 18px; }
+.lead { color:#374151; }
+.badge { display:inline-block; padding:4px 10px; border-radius:9999px; background:#eef2ff; color:#3730a3; font-weight:700; font-size:12px; margin-right:6px;}
+.card { background:#fff; border:1px solid #e5e7eb; border-radius:16px; padding:18px 18px; box-shadow: 0 4px 16px rgba(0,0,0,.06); margin-bottom:16px; }
+.note { background:#f9fafb; border:1px solid #e5e7eb; border-radius:12px; padding:12px; }
+.table { width: 100%; border-collapse: collapse; }
+.table th, .table td { border-bottom:1px solid #e5e7eb; padding:8px; text-align:left; vertical-align: top; }
+ul { margin: 8px 0 8px 18px; }
+.kbd { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; background:#f3f4f6; padding:2px 6px; border-radius:6px; }
+.btnbar { position: sticky; bottom: 0; left: 0; right: 0; background: rgba(248,250,252,.9); border-top:1px solid #e5e7eb; display:flex; justify-content:space-between; gap:8px; padding:10px 14px; backdrop-filter: blur(6px); }
+.btn { display:inline-flex; align-items:center; gap:8px; padding:10px 14px; border-radius:12px; border:1px solid #e5e7eb; background:#fff; cursor:pointer; text-decoration:none; color:#111827; font-weight:600; }
+.btn.primary { background:#111827; color:#fff; border-color:#111827; }
+.btn.muted { color:#6b7280; }
+.small { font-size:12px; color:#6b7280; }
+details { background:#f9fafb; border:1px solid #e5e7eb; padding:10px 12px; border-radius:12px; }
+summary { cursor:pointer; font-weight:700; }
+svg { width:100%; background:#fff; border:1px solid #e5e7eb; border-radius:12px; }
+input[type=text], textarea, select { width:100%; padding:10px; border:1px solid #e5e7eb; border-radius:12px; }
+label { display:block; margin:6px 0; }
+hr { border:0; border-top:1px solid #e5e7eb; margin:16px 0; }
+.center { text-align:center; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card"><span class="badge">🟦 Section 7 – (10 minutes)</span><h1>Run chart interactif + question</h1>
+<div style="margin:10px 0;"><button class="btn primary" id="draw">Tracer</button></div>
+<svg id="chart" viewBox="0 0 900 380" preserveAspectRatio="xMidYMid meet"></svg>
+<h3>🧠 Exercice formatif : interprétez ce run chart</h3>
+<p>Question : Peut-on conclure que l’intervention (clinique mobile) a été efficace ?</p>
+<div>
+<label><input type="radio" name="q" value="oui"> Oui, probablement.</label>
+<label><input type="radio" name="q" value="non"> Non, pas évident.</label>
+<button class="btn primary" id="check">Vérifier</button> <span id="fb" class="small"></span>
+</div>
+<details style="margin-top:10px"><summary>Réponse</summary>
+<p>✅ Oui, probablement.<br>
+Il y a 4 points consécutifs au-dessus de la médiane après l’intervention. Ce n’est pas encore 6, mais la tendance est forte et soutenue. Il serait pertinent de continuer la mesure pour confirmer le changement.</p>
+</details>
+
+<script>
+const svg=document.getElementById('chart');const pad={left:50,top:20,right:20,bottom:40};
+const data=[4,5,4,6,12,15,18,14];
+function median(arr){const a=[...arr].sort((x,y)=>x-y);const n=a.length;return n%2?a[(n-1)/2]:(a[n/2-1]+a[n/2])/2;}
+function draw(){const pre=data.slice(0,4);const med=median(pre);const W=900-pad.left-pad.right,H=380-pad.top-pad.bottom;svg.innerHTML='';const g=document.createElementNS('http://www.w3.org/2000/svg','g');g.setAttribute('transform','translate('+pad.left+','+pad.top+')');svg.appendChild(g);const maxY=Math.max(...data)*1.2;const xStep=W/(data.length-1);g.innerHTML+='<line x1="0" y1="'+H+'" x2="'+W+'" y2="'+H+'" stroke="#9ca3af"/>'+'<line x1="0" y1="0" x2="0" y2="'+H+'" stroke="#9ca3af"/>';const pts=data.map((v,i)=>[i*xStep,H-v/maxY*H]);const path=document.createElementNS('http://www.w3.org/2000/svg','path');path.setAttribute('d',pts.map((p,i)=>(i?'L':'M')+p[0]+' '+p[1]).join(' '));path.setAttribute('fill','none');path.setAttribute('stroke','#111827');path.setAttribute('stroke-width','2');g.appendChild(path);pts.forEach((p,i)=>{const c=document.createElementNS('http://www.w3.org/2000/svg','circle');c.setAttribute('cx',p[0]);c.setAttribute('cy',p[1]);c.setAttribute('r',4);c.setAttribute('fill','#111827');g.appendChild(c);const t=document.createElementNS('http://www.w3.org/2000/svg','text');t.setAttribute('x',p[0]);t.setAttribute('y',H+16);t.setAttribute('text-anchor','middle');t.setAttribute('font-size','12');t.textContent=(i+1).toString();g.appendChild(t);});const yMed=H-med/maxY*H;const mline=document.createElementNS('http://www.w3.org/2000/svg','line');mline.setAttribute('x1',0);mline.setAttribute('x2',W);mline.setAttribute('y1',yMed);mline.setAttribute('y2',yMed);mline.setAttribute('stroke','#ef4444');mline.setAttribute('stroke-dasharray','6 6');g.appendChild(mline);const lbl=document.createElementNS('http://www.w3.org/2000/svg','text');lbl.setAttribute('x',W-4);lbl.setAttribute('y',yMed-6);lbl.setAttribute('text-anchor','end');lbl.setAttribute('font-size','12');lbl.textContent='Médiane (S1–S4)';g.appendChild(lbl);const x5=4*xStep;const vline=document.createElementNS('http://www.w3.org/2000/svg','line');vline.setAttribute('x1',x5);vline.setAttribute('x2',x5);vline.setAttribute('y1',0);vline.setAttribute('y2',H);vline.setAttribute('stroke','#60a5fa');vline.setAttribute('stroke-dasharray','4 4');g.appendChild(vline);const l2=document.createElementNS('http://www.w3.org/2000/svg','text');l2.setAttribute('x',x5+6);l2.setAttribute('y',14);l2.setAttribute('font-size','12');l2.textContent='Intervention (S5)';g.appendChild(l2);}
+document.getElementById('draw').addEventListener('click',draw);
+document.getElementById('check').addEventListener('click',()=>{const v=(document.querySelector('input[name=q]:checked')||{}).value;document.getElementById('fb').textContent=(v==='oui')?'Correct ✅':'Observez la tendance après S5.';});
+</script>
+</div>
+    <div class="btnbar">
+      <a class="btn" href="index.html">Sommaire</a>
+      <span class="small">Diapo 5 / 8</span>
+      <div>
+        <a class="btn" href="07-04.html">← Précédent</a>
+        <a class="btn primary" href="07-06.html">Suivant →</a>
+      </div>
+    </div>
+  </div>
+<script data-prev="07-04.html" data-next="07-06.html">
+<script>
+(function() {
+  const meta = document.currentScript.dataset;
+  const prev = meta.prev, next = meta.next;
+  function go(url){ if(url) window.location.href = url; }
+  document.addEventListener('keydown', (e) => {
+    if (e.target && (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT')) return;
+    if (e.key === 'ArrowLeft') go(prev);
+    if (e.key === 'ArrowRight') go(next);
+  });
+})();
+</script>
+</script>
+</body>
+</html>

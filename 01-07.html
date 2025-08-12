@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>🧠 Exercice formatif</title>
+  <style>
+:root { --font: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; }
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body { font-family: var(--font); margin: 0; color:#111827; background:#f8fafc; }
+.wrap { max-width: 980px; margin: 0 auto; padding: 28px 18px 80px; line-height: 1.6; }
+h1, h2, h3 { line-height: 1.2; margin: 6px 0 10px; }
+h1 { font-size: 28px; }
+h2 { font-size: 22px; }
+h3 { font-size: 18px; }
+.lead { color:#374151; }
+.badge { display:inline-block; padding:4px 10px; border-radius:9999px; background:#eef2ff; color:#3730a3; font-weight:700; font-size:12px; margin-right:6px;}
+.card { background:#fff; border:1px solid #e5e7eb; border-radius:16px; padding:18px 18px; box-shadow: 0 4px 16px rgba(0,0,0,.06); margin-bottom:16px; }
+.note { background:#f9fafb; border:1px solid #e5e7eb; border-radius:12px; padding:12px; }
+.table { width: 100%; border-collapse: collapse; }
+.table th, .table td { border-bottom:1px solid #e5e7eb; padding:8px; text-align:left; vertical-align: top; }
+ul { margin: 8px 0 8px 18px; }
+.kbd { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; background:#f3f4f6; padding:2px 6px; border-radius:6px; }
+.btnbar { position: sticky; bottom: 0; left: 0; right: 0; background: rgba(248,250,252,.9); border-top:1px solid #e5e7eb; display:flex; justify-content:space-between; gap:8px; padding:10px 14px; backdrop-filter: blur(6px); }
+.btn { display:inline-flex; align-items:center; gap:8px; padding:10px 14px; border-radius:12px; border:1px solid #e5e7eb; background:#fff; cursor:pointer; text-decoration:none; color:#111827; font-weight:600; }
+.btn.primary { background:#111827; color:#fff; border-color:#111827; }
+.btn.muted { color:#6b7280; }
+.small { font-size:12px; color:#6b7280; }
+details { background:#f9fafb; border:1px solid #e5e7eb; padding:10px 12px; border-radius:12px; }
+summary { cursor:pointer; font-weight:700; }
+svg { width:100%; background:#fff; border:1px solid #e5e7eb; border-radius:12px; }
+input[type=text], textarea, select { width:100%; padding:10px; border:1px solid #e5e7eb; border-radius:12px; }
+label { display:block; margin:6px 0; }
+hr { border:0; border-top:1px solid #e5e7eb; margin:16px 0; }
+.center { text-align:center; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card"><span class="badge">🟦 Section 1 – (10 minutes)</span><h1>🧠 Exercice formatif</h1>
+<p><strong>Associez chaque concept à sa définition</strong></p>
+<ol>
+<li>Sûreté</li>
+<li>Efficacité</li>
+<li>Sensibilité aux opérations</li>
+<li>Culture juste</li>
+<li>Équité</li>
+</ol>
+<p>A. Même niveau de soins pour tous<br>
+B. Soins appuyés sur les données probantes<br>
+C. Climat qui permet d’apprendre des erreurs sans punir injustement<br>
+D. Éviter les erreurs ou blessures liées aux soins<br>
+E. Capacité d’identifier rapidement un risque ou incident dans le présent</p>
+
+<div id="quiz" class="note">
+  <label>1) Sûreté
+    <select data-answer="D">
+      <option value="">— Choisir —</option>
+      <option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option>
+    </select>
+  </label>
+  <label>2) Efficacité
+    <select data-answer="B">
+      <option value="">— Choisir —</option>
+      <option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option>
+    </select>
+  </label>
+  <label>3) Sensibilité aux opérations
+    <select data-answer="E">
+      <option value="">— Choisir —</option>
+      <option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option>
+    </select>
+  </label>
+  <label>4) Culture juste
+    <select data-answer="C">
+      <option value="">— Choisir —</option>
+      <option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option>
+    </select>
+  </label>
+  <label>5) Équité
+    <select data-answer="A">
+      <option value="">— Choisir —</option>
+      <option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option>
+    </select>
+  </label>
+  <button class="btn primary" id="check">Vérifier</button>
+  <span id="res" class="small"></span>
+</div>
+
+<details style="margin-top:10px"><summary>Réponses</summary>
+<p>1 → D<br>2 → B<br>3 → E<br>4 → C<br>5 → A</p>
+</details>
+
+<script>
+const selects=[...document.querySelectorAll('#quiz select')];
+document.getElementById('check').addEventListener('click',()=>{
+  let ok=0;
+  selects.forEach(s=>{const good=s.dataset.answer; if(s.value===good){ok++; s.style.borderColor='#10b981';} else {s.style.borderColor='#ef4444';}});
+  document.getElementById('res').textContent = (ok===5)?'Parfait 🎉':'Corrigez les choix en rouge.';
+});
+</script>
+</div>
+    <div class="btnbar">
+      <a class="btn" href="index.html">Sommaire</a>
+      <span class="small">Diapo 7 / 7</span>
+      <div>
+        <a class="btn" href="01-06.html">← Précédent</a>
+        <a class="btn primary" href="02-01.html">Suivant →</a>
+      </div>
+    </div>
+  </div>
+<script data-prev="01-06.html" data-next="02-01.html">
+<script>
+(function() {
+  const meta = document.currentScript.dataset;
+  const prev = meta.prev, next = meta.next;
+  function go(url){ if(url) window.location.href = url; }
+  document.addEventListener('keydown', (e) => {
+    if (e.target && (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT')) return;
+    if (e.key === 'ArrowLeft') go(prev);
+    if (e.key === 'ArrowRight') go(next);
+  });
+})();
+</script>
+</script>
+</body>
+</html>

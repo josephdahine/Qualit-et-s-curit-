@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>✅ Quiz formatif final</title>
+  <style>
+:root { --font: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; }
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body { font-family: var(--font); margin: 0; color:#111827; background:#f8fafc; }
+.wrap { max-width: 980px; margin: 0 auto; padding: 28px 18px 80px; line-height: 1.6; }
+h1, h2, h3 { line-height: 1.2; margin: 6px 0 10px; }
+h1 { font-size: 28px; }
+h2 { font-size: 22px; }
+h3 { font-size: 18px; }
+.lead { color:#374151; }
+.badge { display:inline-block; padding:4px 10px; border-radius:9999px; background:#eef2ff; color:#3730a3; font-weight:700; font-size:12px; margin-right:6px;}
+.card { background:#fff; border:1px solid #e5e7eb; border-radius:16px; padding:18px 18px; box-shadow: 0 4px 16px rgba(0,0,0,.06); margin-bottom:16px; }
+.note { background:#f9fafb; border:1px solid #e5e7eb; border-radius:12px; padding:12px; }
+.table { width: 100%; border-collapse: collapse; }
+.table th, .table td { border-bottom:1px solid #e5e7eb; padding:8px; text-align:left; vertical-align: top; }
+ul { margin: 8px 0 8px 18px; }
+.kbd { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; background:#f3f4f6; padding:2px 6px; border-radius:6px; }
+.btnbar { position: sticky; bottom: 0; left: 0; right: 0; background: rgba(248,250,252,.9); border-top:1px solid #e5e7eb; display:flex; justify-content:space-between; gap:8px; padding:10px 14px; backdrop-filter: blur(6px); }
+.btn { display:inline-flex; align-items:center; gap:8px; padding:10px 14px; border-radius:12px; border:1px solid #e5e7eb; background:#fff; cursor:pointer; text-decoration:none; color:#111827; font-weight:600; }
+.btn.primary { background:#111827; color:#fff; border-color:#111827; }
+.btn.muted { color:#6b7280; }
+.small { font-size:12px; color:#6b7280; }
+details { background:#f9fafb; border:1px solid #e5e7eb; padding:10px 12px; border-radius:12px; }
+summary { cursor:pointer; font-weight:700; }
+svg { width:100%; background:#fff; border:1px solid #e5e7eb; border-radius:12px; }
+input[type=text], textarea, select { width:100%; padding:10px; border:1px solid #e5e7eb; border-radius:12px; }
+label { display:block; margin:6px 0; }
+hr { border:0; border-top:1px solid #e5e7eb; margin:16px 0; }
+.center { text-align:center; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card"><span class="badge">🟩 Conclusion – (5 minutes)</span><h1>✅ Quiz formatif final</h1>
+<div id="quiz">
+  <p>1. Quelle question du modèle IHI correspond à la mesure ?</p>
+  <label><input type="radio" name="q1" value="A"> A) Que tentons-nous d’accomplir ?</label><br>
+  <label><input type="radio" name="q1" value="B"> B) Comment saurons-nous qu’un changement est une amélioration ?</label><br>
+  <label><input type="radio" name="q1" value="C"> C) Quels changements pouvons-nous apporter ?</label><hr>
+
+  <p>2. Lequel de ces objectifs est un bon objectif SMART ?</p>
+  <label><input type="radio" name="q2" value="A"> A) On veut que plus de gens se fassent vacciner.</label><br>
+  <label><input type="radio" name="q2" value="B"> B) Augmenter la vaccination de 10 % un jour.</label><br>
+  <label><input type="radio" name="q2" value="C"> C) Augmenter la couverture vaccinale du personnel de 42 % à 70 % d’ici le 30 novembre.</label><hr>
+
+  <p>3. À quoi sert un diagramme de Pareto ?</p>
+  <label><input type="radio" name="q3" value="A"> A) Visualiser les fluctuations dans le temps</label><br>
+  <label><input type="radio" name="q3" value="B"> B) Identifier les causes principales d’un problème</label><br>
+  <label><input type="radio" name="q3" value="C"> C) Savoir si un changement est statistiquement significatif</label><hr>
+
+  <p>4. Quelle est la bonne séquence d’un cycle PDSA ?</p>
+  <label><input type="radio" name="q4" value="A"> A) Do – Plan – Study – Act</label><br>
+  <label><input type="radio" name="q4" value="B"> B) Plan – Do – Study – Act</label><br>
+  <label><input type="radio" name="q4" value="C"> C) Study – Act – Plan – Do</label><hr>
+
+  <p>5. Que signifie une séquence de 6 points consécutifs au-dessus de la médiane dans un run chart ?</p>
+  <label><input type="radio" name="q5" value="A"> A) Variation normale</label><br>
+  <label><input type="radio" name="q5" value="B"> B) Tendance potentielle à confirmer</label><br>
+  <label><input type="radio" name="q5" value="C"> C) Signal probable d’un changement réel</label>
+</div>
+<div style="margin-top:10px"><button class="btn primary" id="grade">Corriger</button> <span id="res" class="small"></span></div>
+
+<script>
+document.getElementById('grade').addEventListener('click',()=>{
+  const answers={q1:'B',q2:'C',q3:'B',q4:'B',q5:'C'};
+  let score=0;
+  Object.keys(answers).forEach(k=>{const v=(document.querySelector('input[name='+k+']:checked')||{}).value; if(v===answers[k]) score++;});
+  document.getElementById('res').textContent='Score : '+score+' / 5';
+});
+</script>
+</div>
+    <div class="btnbar">
+      <a class="btn" href="index.html">Sommaire</a>
+      <span class="small">Diapo 4 / 5</span>
+      <div>
+        <a class="btn" href="08-03.html">← Précédent</a>
+        <a class="btn primary" href="08-05.html">Suivant →</a>
+      </div>
+    </div>
+  </div>
+<script data-prev="08-03.html" data-next="08-05.html">
+<script>
+(function() {
+  const meta = document.currentScript.dataset;
+  const prev = meta.prev, next = meta.next;
+  function go(url){ if(url) window.location.href = url; }
+  document.addEventListener('keydown', (e) => {
+    if (e.target && (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT')) return;
+    if (e.key === 'ArrowLeft') go(prev);
+    if (e.key === 'ArrowRight') go(next);
+  });
+})();
+</script>
+</script>
+</body>
+</html>
