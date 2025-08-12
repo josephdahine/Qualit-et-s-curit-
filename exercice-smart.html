@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Exercice SMART — Reformuler un objectif</title>
+<style>
+  :root{
+    --bg:#f8fafc; --ink:#111827; --muted:#6b7280; --line:#e5e7eb;
+    --ok:#10b981; --err:#ef4444; --card:#ffffff;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;line-height:1.55}
+  .wrap{max-width:900px;margin:0 auto;padding:24px 16px 80px}
+  h1{font-size:26px;margin:0 0 10px}
+  .lead{color:var(--muted)}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;margin:12px 0;box-shadow:0 4px 16px rgba(0,0,0,.06)}
+  .block-title{font-weight:700;margin:0 0 6px}
+  textarea{width:100%;min-height:110px;border:1px solid var(--line);border-radius:10px;padding:10px;font-size:16px;resize:vertical}
+  .hint{font-size:13px;color:var(--muted);margin-top:6px}
+  .btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:12px;border:1px solid var(--line);background:#fff;cursor:pointer;font-weight:600;text-decoration:none;color:var(--ink)}
+  .btn.primary{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .btn[disabled]{opacity:.45;cursor:not-allowed}
+  .msg{margin-top:10px;font-weight:600}
+  .msg.ok{color:var(--ok)}
+  .msg.err{color:var(--err)}
+  .badge{display:inline-block;background:#eef2ff;color:#3730a3;border-radius:999px;padding:4px 10px;font-size:12px;font-weight:700;margin-right:6px}
+  .req{font-size:14px;color:var(--muted)}
+  .checklist{margin:8px 0 0 0; padding-left:18px; color:var(--muted); font-size:14px}
+  .checklist li.ok{color:var(--ok)}
+  .sr{position:absolute;left:-9999px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="card">
+    <span class="badge">Exercice formatif</span>
+    <h1>Reformulez en objectif SMART</h1>
+    <p class="lead">Transformez chaque phrase vague en un objectif SMART (Spécifique, Mesurable, Atteignable, Réaliste, Temporel). Aucune réponse n’est affichée : vous recevez seulement des indications sur les éléments manquants.</p>
+  </div>
+
+  <!-- Cas 1 -->
+  <div class="card" id="bloc1" aria-labelledby="t1">
+    <div class="block-title" id="t1">1) Ponctualité aux réunions</div>
+    <p class="req">Phrase à transformer : <em>« Il faudrait améliorer la ponctualité aux réunions de l’équipe. »</em></p>
+    <label class="sr" for="a1">Votre objectif SMART</label>
+    <textarea id="a1" placeholder="Ex.: Augmenter … de … à … d’ici …"></textarea>
+    <ul class="checklist" id="cl1">
+      <li data-k="spec">Spécifique (concerne clairement les <strong>réunions</strong>)</li>
+      <li data-k="mes">Mesurable (chiffre, %, taux, “de X à Y”)</li>
+      <li data-k="act">Orienté action (augmenter / réduire / faire passer…)</li>
+      <li data-k="temp">Temporel (échéance claire : “d’ici le …”, une date ou un mois/année)</li>
+      <li data-k="suff">Assez détaillé (phrase complète, > 40 caractères)</li>
+    </ul>
+    <div class="btns">
+      <button class="btn primary" id="v1">Valider</button>
+      <button class="btn" id="r1">Réinitialiser</button>
+    </div>
+    <div class="msg" id="m1" aria-live="polite"></div>
+  </div>
+
+  <!-- Cas 2 -->
+  <div class="card" id="bloc2" aria-labelledby="t2">
+    <div class="block-title" id="t2">2) Préparation au congé des patients</div>
+    <p class="req">Phrase à transformer : <em>« Il faudrait que les patients soient mieux préparés à leur congé. »</em></p>
+    <label class="sr" for="a2">Votre objectif SMART</label>
+    <textarea id="a2" placeholder="Ex.: Augmenter … de … à … d’ici …"></textarea>
+    <ul class="checklist" id="cl2">
+      <li data-k="spec">Spécifique (inclut <strong>patients</strong> et/ou <strong>plan de congé</strong>)</li>
+      <li data-k="mes">Mesurable (chiffre, %, taux, “de X à Y”)</li>
+      <li data-k="act">Orienté action (augmenter / réduire / faire passer…)</li>
+      <li data-k="temp">Temporel (échéance claire : “d’ici le …”, une date ou un mois/année)</li>
+      <li data-k="suff">Assez détaillé (phrase complète, > 40 caractères)</li>
+    </ul>
+    <div class="btns">
+      <button class="btn primary" id="v2">Valider</button>
+      <button class="btn" id="r2">Réinitialiser</button>
+    </div>
+    <div class="msg" id="m2" aria-live="polite"></div>
+  </div>
+
+  <!-- Fin / Continuer -->
+  <div class="card" id="final">
+    <div class="block-title">Validation de l’exercice</div>
+    <p class="lead" id="sum">Validez les deux objectifs pour terminer.</p>
+    <div class="btns">
+      <button class="btn primary" id="done" disabled>Exercice terminé</button>
+      <button class="btn" id="resetAll">Tout effacer</button>
+    </div>
+    <p class="hint">Astuce Rise : place un bloc <em>Continuer</em> juste après cet embed. Quand “Exercice terminé” devient actif, invite l’étudiant à cliquer sur le bloc <em>Continuer</em> pour avancer.</p>
+  </div>
+</div>
+
+<script>
+(function(){
+  // --- utilitaires regex français ---
+  const mois = "(janvier|février|fevrier|mars|avril|mai|juin|juillet|août|aout|septembre|octobre|novembre|décembre|decembre)";
+  const dateRe = new RegExp("(d[’']ici|avant le|au plus tard le|d’ici le|d'ci le|le)\\s*(\\d{1,2}\\s*"+mois+"|"+mois+"\\s*\\d{4}|\\d{1,2}/\\d{1,2}/\\d{2,4}|\\d{4})","i");
+  const percentRe = /(de\\s*\\d{1,3}\\s*%\\s*à\\s*\\d{1,3}\\s*%)|(\\d{1,3}\\s*%)/i;
+  const actionRe = /(augmenter|réduire|diminuer|faire\\s+passer|accroître|ameliorer|améliorer)/i;
+
+  function scoreSMART(txt, opts){
+    const t = (txt||"").trim().toLowerCase();
+    const marks = {spec:false, mes:false, act:false, temp:false, suff:false};
+
+    // Spécifique (contexte)
+    if(opts === "reunions"){
+      marks.spec = /réunion|reunion/.test(t);
+    }else if(opts === "conge"){
+      marks.spec = /(patient|plan\\s+de\\s+congé|plan\\s+de\\s+conge|congé|conge)/.test(t);
+    }
+
+    // Mesurable
+    marks.mes = percentRe.test(t) || /\\btaux\\b|\\bproportion\\b|\\bnombre\\b/.test(t);
+
+    // Action
+    marks.act = actionRe.test(t);
+
+    // Temporel
+    marks.temp = dateRe.test(t);
+
+    // Suffisamment détaillé
+    marks.suff = t.length >= 40;
+
+    // Seuil : exiger au moins 4 critères sur 5
+    const ok = Object.values(marks).filter(Boolean).length >= 4;
+    return {ok, marks};
+  }
+
+  function applyChecklist(listEl, marks){
+    listEl.querySelectorAll("li").forEach(li=>{
+      const k = li.getAttribute("data-k");
+      if(marks[k]) li.classList.add("ok"); else li.classList.remove("ok");
+    });
+  }
+
+  function validate1(){
+    const val = document.getElementById("a1").value;
+    const res = scoreSMART(val, "reunions");
+    applyChecklist(document.getElementById("cl1"), res.marks);
+    const m = document.getElementById("m1");
+    if(res.ok){ m.textContent = "OK — objectif SMART valide pour #1."; m.className="msg ok"; localStorage.setItem("qi:smart:1","ok"); }
+    else { m.textContent = "Presque ! Ajoutez les éléments manquants (voir la checklist)."; m.className="msg err"; localStorage.removeItem("qi:smart:1"); }
+    refreshDone();
+  }
+  function validate2(){
+    const val = document.getElementById("a2").value;
+    const res = scoreSMART(val, "conge");
+    applyChecklist(document.getElementById("cl2"), res.marks);
+    const m = document.getElementById("m2");
+    if(res.ok){ m.textContent = "OK — objectif SMART valide pour #2."; m.className="msg ok"; localStorage.setItem("qi:smart:2","ok"); }
+    else { m.textContent = "À améliorer : complétez les éléments manquants."; m.className="msg err"; localStorage.removeItem("qi:smart:2"); }
+    refreshDone();
+  }
+
+  function refreshDone(){
+    const b = document.getElementById("done");
+    const ok = localStorage.getItem("qi:smart:1")==="ok" && localStorage.getItem("qi:smart:2")==="ok";
+    if(ok){ b.removeAttribute("disabled"); document.getElementById("sum").textContent = "Bravo ! Les deux objectifs sont valides. Vous pouvez continuer."; }
+    else { b.setAttribute("disabled","disabled"); document.getElementById("sum").textContent = "Validez les deux objectifs pour terminer."; }
+  }
+
+  // boutons
+  document.getElementById("v1").addEventListener("click", validate1);
+  document.getElementById("v2").addEventListener("click", validate2);
+
+  document.getElementById("r1").addEventListener("click", ()=>{
+    document.getElementById("a1").value=""; document.getElementById("m1").textContent=""; localStorage.removeItem("qi:smart:1");
+    applyChecklist(document.getElementById("cl1"), {spec:false,mes:false,act:false,temp:false,suff:false}); refreshDone();
+  });
+  document.getElementById("r2").addEventListener("click", ()=>{
+    document.getElementById("a2").value=""; document.getElementById("m2").textContent=""; localStorage.removeItem("qi:smart:2");
+    applyChecklist(document.getElementById("cl2"), {spec:false,mes:false,act:false,temp:false,suff:false}); refreshDone();
+  });
+  document.getElementById("resetAll").addEventListener("click", ()=>{
+    ["qi:smart:1","qi:smart:2"].forEach(k=>localStorage.removeItem(k));
+    ["a1","a2"].forEach(id=>document.getElementById(id).value="");
+    ["m1","m2"].forEach(id=>document.getElementById(id).textContent="");
+    applyChecklist(document.getElementById("cl1"), {spec:false,mes:false,act:false,temp:false,suff:false});
+    applyChecklist(document.getElementById("cl2"), {spec:false,mes:false,act:false,temp:false,suff:false});
+    refreshDone();
+  });
+
+  // bouton de fin (optionnel)
+  document.getElementById("done").addEventListener("click", ()=>{
+    localStorage.setItem("qi:smart:done","ok");
+    alert("Exercice terminé ✅");
+  });
+
+  refreshDone();
+})();
+</script>
+</body>
+</html>
