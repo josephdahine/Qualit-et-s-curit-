@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Section 5 – Driver Diagram</title>
+  <style>
+:root { --font: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; }
+* { box-sizing: border-box; }
+body { font-family: var(--font); margin: 0; padding: 24px; line-height: 1.6; color:#111827; background:#f8fafc; }
+.wrap { max-width: 980px; margin: 0 auto; }
+.card { background: #fff; border: 1px solid #e5e7eb; border-radius: 16px; padding: 22px; box-shadow: 0 4px 16px rgba(0,0,0,.06); margin-bottom: 16px; }
+h1, h2, h3 { line-height: 1.2; margin: 6px 0 10px; }
+h1 { font-size: 28px; }
+h2 { font-size: 22px; }
+h3 { font-size: 18px; }
+.lead { color:#374151; }
+.kbd { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; background:#f3f4f6; padding:2px 6px; border-radius:6px; }
+.badge { display:inline-block; padding:4px 10px; border-radius:9999px; background:#eef2ff; color:#3730a3; font-weight:700; font-size:12px; margin-right:6px;}
+.table { width:100%; border-collapse: collapse; }
+.table th, .table td { border-bottom:1px solid #e5e7eb; padding:8px; text-align:left; vertical-align: top; }
+.note { background:#f9fafb; border:1px solid #e5e7eb; border-radius:12px; padding:12px; }
+.btn { display:inline-block; padding: 10px 14px; border-radius: 12px; border: 1px solid #e5e7eb; cursor: pointer; margin: 6px 6px 6px 0; background: #f9fafb; font-weight: 600; }
+.btn:disabled { opacity: .5; cursor: not-allowed; }
+.primary { background: #111827; color: white; border-color: #111827; }
+.muted { color: #6b7280; }
+.ok { color: #065f46; font-weight: 600; }
+.warn { color: #92400e; font-weight: 600; }
+svg { background:#ffffff; width:100%; border:1px solid #e5e7eb; border-radius:12px; }
+details { background:#f9fafb; border:1px solid #e5e7eb; padding:12px; border-radius:12px; }
+summary { cursor:pointer; font-weight:700; }
+hr { border:0; border-top:1px solid #e5e7eb; margin: 20px 0; }
+ul { margin: 8px 0 8px 18px; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    
+<div class="card">
+  <span class="badge">Section 5 – 10 min</span>
+  <h1>Driver Diagram</h1>
+  <p>Reliez votre <strong>objectif SMART</strong>, les <strong>facteurs primaires</strong> qui l’influencent directement, et les <strong>facteurs secondaires</strong> (interventions) à implanter.</p>
+  <div class="note">
+    <p><strong>Exemple (fil conducteur)</strong> — Objectif : augmenter la couverture vaccinale de 42 % à 70 % d’ici le 30 novembre.</p>
+    <table class="table">
+      <thead><tr><th>Facteurs primaires</th><th>Facteurs secondaires (exemples)</th></tr></thead>
+      <tbody>
+        <tr><td>Accès à la vaccination</td><td>Cliniques mobiles, horaires élargis, sans rendez-vous</td></tr>
+        <tr><td>Préoccupations du personnel</td><td>Capsules éducatives, affiches rassurantes</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="card" id="exo5">
+  <h2>Exercice — Sélectionnez des interventions pertinentes</h2>
+  <p>Choisissez au moins <strong>2</strong> interventions pour chaque facteur.</p>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+    <div class="note">
+      <h3>Accès à la vaccination</h3>
+      <label><input type="checkbox" data-group="acc" value="b"> Cliniques mobiles sur les unités</label><br>
+      <label><input type="checkbox" data-group="acc" value="c"> Plages horaires tôt/tard</label><br>
+      <label><input type="checkbox" data-group="acc" value="e"> Vaccination dans la salle de pause</label><br>
+      <label><input type="checkbox" data-group="acc" value="a"> Uniquement en pharmacie externe</label><br>
+      <label><input type="checkbox" data-group="acc" value="d"> Rendez-vous obligatoire</label>
+    </div>
+    <div class="note">
+      <h3>Préoccupations du personnel</h3>
+      <label><input type="checkbox" data-group="pre" value="b"> Témoignages vidéo de collègues</label><br>
+      <label><input type="checkbox" data-group="pre" value="c"> Discussion avec un professionnel</label><br>
+      <label><input type="checkbox" data-group="pre" value="e"> FAQ vulgarisée</label><br>
+      <label><input type="checkbox" data-group="pre" value="a"> Brochure scientifique de 12 pages</label><br>
+      <label><input type="checkbox" data-group="pre" value="d"> Statistiques provinciales seules</label>
+    </div>
+  </div>
+  <div style="margin-top:10px"><button class="btn primary" id="validate">Valider</button> <span id="out"></span></div>
+</div>
+
+  </div>
+
+<script>
+const goodAcc=new Set(['b','c','e']);const goodPre=new Set(['b','c','e']);
+document.getElementById('validate').addEventListener('click',()=>{
+  const acc=[...document.querySelectorAll('input[data-group=acc]:checked')].map(x=>x.value);
+  const pre=[...document.querySelectorAll('input[data-group=pre]:checked')].map(x=>x.value);
+  const accOK=acc.every(x=>goodAcc.has(x))&&acc.length>=2;
+  const preOK=pre.every(x=>goodPre.has(x))&&pre.length>=2;
+  document.getElementById('out').innerHTML = (accOK&&preOK) ? '<span class="ok">Choix pertinents ✅</span>' : '<span class="warn">Ajustez vos choix.</span>';
+});
+</script>
+
+</body>
+</html>

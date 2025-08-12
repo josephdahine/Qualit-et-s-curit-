@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Section 2 – Fondements & IHI</title>
+  <style>
+:root { --font: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; }
+* { box-sizing: border-box; }
+body { font-family: var(--font); margin: 0; padding: 24px; line-height: 1.6; color:#111827; background:#f8fafc; }
+.wrap { max-width: 980px; margin: 0 auto; }
+.card { background: #fff; border: 1px solid #e5e7eb; border-radius: 16px; padding: 22px; box-shadow: 0 4px 16px rgba(0,0,0,.06); margin-bottom: 16px; }
+h1, h2, h3 { line-height: 1.2; margin: 6px 0 10px; }
+h1 { font-size: 28px; }
+h2 { font-size: 22px; }
+h3 { font-size: 18px; }
+.lead { color:#374151; }
+.kbd { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; background:#f3f4f6; padding:2px 6px; border-radius:6px; }
+.badge { display:inline-block; padding:4px 10px; border-radius:9999px; background:#eef2ff; color:#3730a3; font-weight:700; font-size:12px; margin-right:6px;}
+.table { width:100%; border-collapse: collapse; }
+.table th, .table td { border-bottom:1px solid #e5e7eb; padding:8px; text-align:left; vertical-align: top; }
+.note { background:#f9fafb; border:1px solid #e5e7eb; border-radius:12px; padding:12px; }
+.btn { display:inline-block; padding: 10px 14px; border-radius: 12px; border: 1px solid #e5e7eb; cursor: pointer; margin: 6px 6px 6px 0; background: #f9fafb; font-weight: 600; }
+.btn:disabled { opacity: .5; cursor: not-allowed; }
+.primary { background: #111827; color: white; border-color: #111827; }
+.muted { color: #6b7280; }
+.ok { color: #065f46; font-weight: 600; }
+.warn { color: #92400e; font-weight: 600; }
+svg { background:#ffffff; width:100%; border:1px solid #e5e7eb; border-radius:12px; }
+details { background:#f9fafb; border:1px solid #e5e7eb; padding:12px; border-radius:12px; }
+summary { cursor:pointer; font-weight:700; }
+hr { border:0; border-top:1px solid #e5e7eb; margin: 20px 0; }
+ul { margin: 8px 0 8px 18px; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    
+<div class="card">
+  <span class="badge">Section 2 – 10 min</span>
+  <h1>Fondements de l'amélioration continue</h1>
+  <p>Chaque jour, des équipes de soins s'efforcent de faire mieux pour leurs patients. Le modèle IHI, largement utilisé, propose trois questions simples mais puissantes :</p>
+  <ol>
+    <li><strong>Que tentons-nous d’accomplir ?</strong> → objectif clair, concret, ambitieux mais réaliste.</li>
+    <li><strong>Comment saurons-nous qu’un changement est une amélioration ?</strong> → choisir des mesures de suivi.</li>
+    <li><strong>Quels changements pouvons-nous apporter ?</strong> → générer des idées concrètes à tester.</li>
+  </ol>
+</div>
+<div class="card">
+  <h2>Les fondements selon Deming</h2>
+  <ul>
+    <li><strong>Compréhension des systèmes</strong> : aucun changement n’est isolé.</li>
+    <li><strong>Connaissance de la variation</strong> : distinguer fluctuations normales et vrais changements.</li>
+    <li><strong>Psychologie humaine</strong> : engager et comprendre les personnes.</li>
+    <li><strong>Théorie de la connaissance</strong> : l’amélioration repose sur l’apprentissage.</li>
+  </ul>
+</div>
+
+<div class="card" id="exo2">
+  <h2>Exercice — Associez question IHI ↔ fonction</h2>
+  <div class="grid">
+    <div class="row" style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div><strong>Que tentons-nous d’accomplir ?</strong></div>
+      <div><select data-answer="C"><option value="">— Choisir —</option><option value="A">A. Idée de changement</option><option value="B">B. Mesure</option><option value="C">C. But</option></select></div>
+    </div>
+    <div class="row" style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div><strong>Comment saurons-nous qu’un changement est une amélioration ?</strong></div>
+      <div><select data-answer="B"><option value="">— Choisir —</option><option value="A">A. Idée de changement</option><option value="B">B. Mesure</option><option value="C">C. But</option></select></div>
+    </div>
+    <div class="row" style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div><strong>Quels changements pouvons-nous apporter ?</strong></div>
+      <div><select data-answer="A"><option value="">— Choisir —</option><option value="A">A. Idée de changement</option><option value="B">B. Mesure</option><option value="C">C. But</option></select></div>
+    </div>
+  </div>
+  <div style="margin-top:12px;">
+    <button class="btn primary" id="check2">Vérifier</button>
+    <button class="btn" id="reset2">Réinitialiser</button>
+  </div>
+  <div id="res2" style="margin-top:8px;"></div>
+</div>
+
+  </div>
+
+<script>
+const sels2=[...document.querySelectorAll('#exo2 select')],res2=document.getElementById('res2');
+document.getElementById('check2').addEventListener('click',()=>{let ok=0;sels2.forEach(s=>{if(s.value===s.dataset.answer)ok++;s.style.borderColor=(s.value===s.dataset.answer)?'#10b981':'#ef4444';});res2.innerHTML=(ok===3)?'<p class="ok">Exact 🎯</p>':'<p class="warn">Encore des erreurs.</p>';});
+document.getElementById('reset2').addEventListener('click',()=>{sels2.forEach(s=>{s.value='';s.style.borderColor='#e5e7eb';});res2.textContent='';});
+</script>
+
+</body>
+</html>

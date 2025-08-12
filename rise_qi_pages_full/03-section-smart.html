@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Section 3 – Objectifs SMART</title>
+  <style>
+:root { --font: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; }
+* { box-sizing: border-box; }
+body { font-family: var(--font); margin: 0; padding: 24px; line-height: 1.6; color:#111827; background:#f8fafc; }
+.wrap { max-width: 980px; margin: 0 auto; }
+.card { background: #fff; border: 1px solid #e5e7eb; border-radius: 16px; padding: 22px; box-shadow: 0 4px 16px rgba(0,0,0,.06); margin-bottom: 16px; }
+h1, h2, h3 { line-height: 1.2; margin: 6px 0 10px; }
+h1 { font-size: 28px; }
+h2 { font-size: 22px; }
+h3 { font-size: 18px; }
+.lead { color:#374151; }
+.kbd { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; background:#f3f4f6; padding:2px 6px; border-radius:6px; }
+.badge { display:inline-block; padding:4px 10px; border-radius:9999px; background:#eef2ff; color:#3730a3; font-weight:700; font-size:12px; margin-right:6px;}
+.table { width:100%; border-collapse: collapse; }
+.table th, .table td { border-bottom:1px solid #e5e7eb; padding:8px; text-align:left; vertical-align: top; }
+.note { background:#f9fafb; border:1px solid #e5e7eb; border-radius:12px; padding:12px; }
+.btn { display:inline-block; padding: 10px 14px; border-radius: 12px; border: 1px solid #e5e7eb; cursor: pointer; margin: 6px 6px 6px 0; background: #f9fafb; font-weight: 600; }
+.btn:disabled { opacity: .5; cursor: not-allowed; }
+.primary { background: #111827; color: white; border-color: #111827; }
+.muted { color: #6b7280; }
+.ok { color: #065f46; font-weight: 600; }
+.warn { color: #92400e; font-weight: 600; }
+svg { background:#ffffff; width:100%; border:1px solid #e5e7eb; border-radius:12px; }
+details { background:#f9fafb; border:1px solid #e5e7eb; padding:12px; border-radius:12px; }
+summary { cursor:pointer; font-weight:700; }
+hr { border:0; border-top:1px solid #e5e7eb; margin: 20px 0; }
+ul { margin: 8px 0 8px 18px; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    
+<div class="card">
+  <span class="badge">Section 3 – 10 min</span>
+  <h1>Objectifs SMART</h1>
+  <p>Des objectifs vagues ne mobilisent pas. La méthode SMART aide à formuler des objectifs <strong>Spécifiques, Mesurables, Atteignables, Réalistes</strong> et <strong>Temporels</strong>.</p>
+  <div class="note">
+    <p><strong>Exemples :</strong></p>
+    <ul>
+      <li>Vaccination : « Augmenter la couverture antigrippale du personnel de 42 % à 70 % d’ici le 30 novembre. »</li>
+      <li>Valeur patient : « Réduire le taux de réadmission MPOC de 22 % à 15 % d’ici juin 2026. »</li>
+    </ul>
+  </div>
+  <p><strong>Attention :</strong> ne pas confondre objectif et intervention.</p>
+</div>
+<div class="card">
+  <h2>Indicateurs (Donabedian)</h2>
+  <table class="table">
+    <thead><tr><th>Type</th><th>Définition</th><th>Exemple</th></tr></thead>
+    <tbody>
+      <tr><td>Structure</td><td>Ce qui est en place</td><td>Taux d’unités avec réfrigérateur à vaccins fonctionnel</td></tr>
+      <tr><td>Processus</td><td>Ce qui est fait</td><td>Proportion d’employés rencontrés par l’infirmière-pivot</td></tr>
+      <tr><td>Résultat</td><td>Ce qui change pour le patient</td><td>Taux de grippe parmi les hospitalisations évitables</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="card" id="exo3">
+  <h2>Exercice — Reformulez en SMART</h2>
+  <p><strong>Objectif vague :</strong> « Il faudrait améliorer la ponctualité aux réunions de l’équipe. »</p>
+  <textarea id="smart" style="width:100%;min-height:90px;padding:10px;border:1px solid #e5e7eb;border-radius:12px" placeholder="Écrivez votre version SMART ici..."></textarea>
+  <div><button class="btn primary" id="eval">Évaluer</button><button class="btn" id="hint">Exemple</button><button class="btn" id="reset">Réinitialiser</button><button class="btn" id="copy">Copier</button></div>
+  <div id="feedback" class="note" style="margin-top:10px;"></div>
+</div>
+
+  </div>
+
+<script>
+const txt=document.getElementById('smart'),fb=document.getElementById('feedback');
+function scoreSMART(s){s=s.toLowerCase();let score=0;if(s.match(/\d{1,3}\s*%/)||s.match(/\bde\s*\d+\s*%\s*à\s*\d+\s*%/))score++;if(s.match(/d'ici|avant le|d’ici|au plus tard/))score++;if(s.match(/augmenter|réduire|diminuer|faire passer/))score++;if(s.match(/\b(équipe|ressources|contexte|unit[eé])\b/))score++;if(s.length>40)score++;return score;}
+document.getElementById('eval').addEventListener('click',()=>{const s=txt.value.trim();if(!s){fb.innerHTML='<p class="warn">Écrivez votre proposition.</p>';return;}const sc=scoreSMART(s);const notes=['Ajoutez une cible chiffrée.','Précisez une échéance.','Indiquez l’action et l’objet.','Mentionnez le contexte.','Soyez suffisamment précis.'];let tips=notes.map((n,i)=>sc>i?'✅ '+n:'➡️ '+n).join('<br>');fb.innerHTML='<p>Score SMART : <strong>'+sc+'/5</strong></p><p>'+tips+'</p>';});
+document.getElementById('hint').addEventListener('click',()=>{txt.value="Augmenter la proportion de réunions débutant à l’heure de 60 % à 90 % d’ici le 1er juillet.";fb.innerHTML='<p class="ok">Exemple chargé. Personnalisez-le.</p>';});
+document.getElementById('reset').addEventListener('click',()=>{txt.value='';fb.textContent='';});
+document.getElementById('copy').addEventListener('click',async()=>{try{await navigator.clipboard.writeText(txt.value);fb.innerHTML='<p class="ok">Copié.</p>';}catch(e){fb.innerHTML='<p class="warn">Copie non autorisée.</p>';}});
+</script>
+
+</body>
+</html>
