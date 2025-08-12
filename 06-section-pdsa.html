@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Section 6 – PDSA</title>
+  <style>
+:root { --font: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; }
+* { box-sizing: border-box; }
+body { font-family: var(--font); margin: 0; padding: 24px; line-height: 1.6; color:#111827; background:#f8fafc; }
+.wrap { max-width: 980px; margin: 0 auto; }
+.card { background: #fff; border: 1px solid #e5e7eb; border-radius: 16px; padding: 22px; box-shadow: 0 4px 16px rgba(0,0,0,.06); margin-bottom: 16px; }
+h1, h2, h3 { line-height: 1.2; margin: 6px 0 10px; }
+h1 { font-size: 28px; }
+h2 { font-size: 22px; }
+h3 { font-size: 18px; }
+.lead { color:#374151; }
+.kbd { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; background:#f3f4f6; padding:2px 6px; border-radius:6px; }
+.badge { display:inline-block; padding:4px 10px; border-radius:9999px; background:#eef2ff; color:#3730a3; font-weight:700; font-size:12px; margin-right:6px;}
+.table { width:100%; border-collapse: collapse; }
+.table th, .table td { border-bottom:1px solid #e5e7eb; padding:8px; text-align:left; vertical-align: top; }
+.note { background:#f9fafb; border:1px solid #e5e7eb; border-radius:12px; padding:12px; }
+.btn { display:inline-block; padding: 10px 14px; border-radius: 12px; border: 1px solid #e5e7eb; cursor: pointer; margin: 6px 6px 6px 0; background: #f9fafb; font-weight: 600; }
+.btn:disabled { opacity: .5; cursor: not-allowed; }
+.primary { background: #111827; color: white; border-color: #111827; }
+.muted { color: #6b7280; }
+.ok { color: #065f46; font-weight: 600; }
+.warn { color: #92400e; font-weight: 600; }
+svg { background:#ffffff; width:100%; border:1px solid #e5e7eb; border-radius:12px; }
+details { background:#f9fafb; border:1px solid #e5e7eb; padding:12px; border-radius:12px; }
+summary { cursor:pointer; font-weight:700; }
+hr { border:0; border-top:1px solid #e5e7eb; margin: 20px 0; }
+ul { margin: 8px 0 8px 18px; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    
+<div class="card">
+  <span class="badge">Section 6 – 10 min</span>
+  <h1>Tester une idée : le cycle PDSA</h1>
+  <p>Plutôt que de déployer à grande échelle, testez <em>petit</em> : <strong>Plan – Do – Study – Act</strong>.</p>
+  <table class="table">
+    <thead><tr><th>Étape</th><th>Ce qu’on fait</th></tr></thead>
+    <tbody>
+      <tr><td>Plan</td><td>Définir le test, responsables, lieu, calendrier, mesure</td></tr>
+      <tr><td>Do</td><td>Exécuter le plan à petite échelle</td></tr>
+      <tr><td>Study</td><td>Comparer aux attentes, tirer des leçons</td></tr>
+      <tr><td>Act</td><td>Adapter, abandonner ou étendre</td></tr>
+    </tbody>
+  </table>
+  <div class="note">
+    <p><strong>Exemple :</strong> Clinique mobile S5–S6 (7–9h). 8/15 se présentent → ajouter un rappel verbal du chef d’unité et tester dans une 2e unité.</p>
+  </div>
+</div>
+
+<div class="card" id="exo6">
+  <h2>Exercice — Complétez votre mini-plan PDSA</h2>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+    <div><h3>Plan</h3><textarea id="plan" style="width:100%;min-height:80px;padding:10px;border:1px solid #e5e7eb;border-radius:12px" placeholder="Qui ? Quoi ? Où ? Quand ? Mesure ?"></textarea></div>
+    <div><h3>Do</h3><textarea id="do" style="width:100%;min-height:80px;padding:10px;border:1px solid #e5e7eb;border-radius:12px"></textarea></div>
+    <div><h3>Study</h3><textarea id="study" style="width:100%;min-height:80px;padding:10px;border:1px solid #e5e7eb;border-radius:12px"></textarea></div>
+    <div><h3>Act</h3><textarea id="act" style="width:100%;min-height:80px;padding:10px;border:1px solid #e5e7eb;border-radius:12px"></textarea></div>
+  </div>
+  <div style="margin-top:10px"><button class="btn primary" id="build">Générer le résumé</button> <button class="btn" id="copy">Copier</button></div>
+  <div id="out" class="note" style="margin-top:10px"></div>
+</div>
+
+  </div>
+
+<script>
+const plan=document.getElementById('plan'),doo=document.getElementById('do'),study=document.getElementById('study'),act=document.getElementById('act'),out=document.getElementById('out');
+document.getElementById('build').addEventListener('click',()=>{const lines=[];if(plan.value.trim())lines.push('<strong>Plan:</strong> '+plan.value.trim());if(doo.value.trim())lines.push('<strong>Do:</strong> '+doo.value.trim());if(study.value.trim())lines.push('<strong>Study:</strong> '+study.value.trim());if(act.value.trim())lines.push('<strong>Act:</strong> '+act.value.trim());out.innerHTML=lines.length?'<p>'+lines.join('</p><p>')+'</p>':'<p class="warn">Complétez les champs ci-dessus.</p>';});
+document.getElementById('copy').addEventListener('click',async()=>{const text=out.textContent.trim();if(!text)return;try{await navigator.clipboard.writeText(text);alert('Résumé copié.');}catch(e){alert('Copie non autorisée.');}});
+</script>
+
+</body>
+</html>
