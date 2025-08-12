@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Tester une idée : le cycle PDSA</title>
+  <title>PDSA</title>
   <style>
 :root { --font: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; }
 * { box-sizing: border-box; }
@@ -20,51 +20,122 @@ h3 { font-size: 18px; }
 .table { width: 100%; border-collapse: collapse; }
 .table th, .table td { border-bottom:1px solid #e5e7eb; padding:8px; text-align:left; vertical-align: top; }
 ul { margin: 8px 0 8px 18px; }
-.kbd { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; background:#f3f4f6; padding:2px 6px; border-radius:6px; }
 .btnbar { position: sticky; bottom: 0; left: 0; right: 0; background: rgba(248,250,252,.9); border-top:1px solid #e5e7eb; display:flex; justify-content:space-between; gap:8px; padding:10px 14px; backdrop-filter: blur(6px); }
 .btn { display:inline-flex; align-items:center; gap:8px; padding:10px 14px; border-radius:12px; border:1px solid #e5e7eb; background:#fff; cursor:pointer; text-decoration:none; color:#111827; font-weight:600; }
+.btn[disabled] { opacity:.45; cursor:not-allowed; }
 .btn.primary { background:#111827; color:#fff; border-color:#111827; }
-.btn.muted { color:#6b7280; }
 .small { font-size:12px; color:#6b7280; }
-details { background:#f9fafb; border:1px solid #e5e7eb; padding:10px 12px; border-radius:12px; }
-summary { cursor:pointer; font-weight:700; }
-svg { width:100%; background:#fff; border:1px solid #e5e7eb; border-radius:12px; }
-input[type=text], textarea, select { width:100%; padding:10px; border:1px solid #e5e7eb; border-radius:12px; }
-label { display:block; margin:6px 0; }
-hr { border:0; border-top:1px solid #e5e7eb; margin:16px 0; }
-.center { text-align:center; }
+.lock { background:#fff7ed; border:1px solid #f59e0b; color:#92400e; padding:12px; border-radius:12px; }
+.hidden { display:none; }
+a.disabled { pointer-events:none; opacity:.45; text-decoration:none; }
 </style>
 </head>
 <body>
   <div class="wrap">
-    <div class="card"><span class="badge">🟦 Section 6 – (10 minutes)</span><h1>Tester une idée : le cycle PDSA</h1>
-<p>Pourquoi ne pas tout implanter d’un coup ?<br>
-Même si une idée semble excellente sur papier, elle peut se heurter à des obstacles inattendus une fois sur le terrain : problème de logistique, incompréhension, ou simplement désintérêt.<br>
-Plutôt que de déployer à grande échelle, on commence par tester petit. C’est le principe du cycle PDSA :<br>
-<strong>Plan – Do – Study – Act</strong><br>
-Planifier – Faire – Étudier – Ajuster<br>
-Ce cycle d’amélioration permet de tester une intervention à petite échelle, en tirer des leçons, puis de l’adapter, abandonner ou étendre.</p>
-</div>
+    <div class="card"><span class="badge">Section 06</span><h1>PDSA</h1>
+    <div id="lock" class="lock hidden">
+      <strong id="lockmsg">Diapo verrouillée.</strong>
+      <div style="margin-top:8px"><a class="btn" href="index.html">← Revenir</a></div>
+    </div>
+    <div id="content" class="">
+      <p>Contenu…</p>
+    </div>
+    </div>
     <div class="btnbar">
       <a class="btn" href="index.html">Sommaire</a>
-      <span class="small">Diapo 1 / 4</span>
+      <span class="small">Diapo 1 / 2</span>
       <div>
-        <a class="btn" href="05-05.html">← Précédent</a>
-        <a class="btn primary" href="06-02.html">Suivant →</a>
+        <span></span>
+        <a class="btn primary" id="next" href="06-02.html">Suivant →</a>
       </div>
     </div>
   </div>
-<script data-prev="05-05.html" data-next="06-02.html">
+<script data-section="06" data-slide="1" data-exercise="0" data-prev="" data-next="06-02.html" data-last="0">
 <script>
 (function() {
-  const meta = document.currentScript.dataset;
-  const prev = meta.prev, next = meta.next;
+  const el = document.currentScript;
+  const meta = el.dataset;
+  const sec = meta.section; // "00","01",...
+  const secNum = parseInt(sec,10);
+  const slide = parseInt(meta.slide,10);
+  const isExercise = meta.exercise === "1";
+  const isLast = meta.last === "1";
+  const prevIn = meta.prev, nextIn = meta.next;
+  const nextBtn = document.getElementById('next');
+  const content = document.getElementById('content');
+  const lock = document.getElementById('lock');
+  const lockMsg = document.getElementById('lockmsg');
+
+  const key = `sec${sec}:${String(slide).padStart(2,'0')}`;
+  const prevKey = slide>1 ? `sec${sec}:${String(slide-1).padStart(2,'0')}` : null;
+  const prevSectionKey = secNum>1 ? `sectionDone:${String(secNum-1).padStart(2,'0')}` : null;
+  const mySectionKey = `sectionDone:${sec}`;
+
   function go(url){ if(url) window.location.href = url; }
+
+  function checkSectionPrereq(){
+    if (!prevSectionKey) return true; // Section 01 libre
+    try{ return localStorage.getItem(prevSectionKey)==='ok'; }catch(e){ return false; }
+  }
+  function checkSlideChain(){
+    if (slide===1) return true;
+    try{ return localStorage.getItem(prevKey)==='ok'; }catch(e){ return false; }
+  }
+  function markSlideOk(){ try{ localStorage.setItem(key,'ok'); }catch(e){} }
+  function markSectionDone(){ try{ localStorage.setItem(mySectionKey,'ok'); }catch(e){} }
+
+  // Block if previous section not completed
+  let prereqOK = checkSectionPrereq();
+  if(!prereqOK){
+    if(lock && lockMsg){
+      lockMsg.textContent = `Section verrouillée. Terminez d’abord la section ${String(secNum-1).padStart(2,'0')}.`;
+      lock.classList.remove('hidden');
+    }
+    if(content){ content.classList.add('hidden'); }
+    if(nextBtn){ nextBtn.setAttribute('disabled','disabled'); }
+    return;
+  }
+
+  // Then chain inside section
+  const chainOK = checkSlideChain();
+  if(!chainOK){
+    if(content){ content.classList.add('hidden'); }
+    if(lock){ lock.classList.remove('hidden'); }
+    if(nextBtn){ nextBtn.setAttribute('disabled','disabled'); }
+  }else{
+    if(content){ content.classList.remove('hidden'); }
+    if(lock){ lock.classList.add('hidden'); }
+    if(!isExercise){
+      markSlideOk();
+      if(isLast){ markSectionDone(); }
+    }else{
+      if(nextBtn){ nextBtn.setAttribute('disabled','disabled'); }
+    }
+  }
+
+  // Keyboard within section
   document.addEventListener('keydown', (e) => {
     if (e.target && (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT')) return;
-    if (e.key === 'ArrowLeft') go(prev);
-    if (e.key === 'ArrowRight') go(next);
+    if (e.key === 'ArrowLeft') go(prevIn || '');
+    if (e.key === 'ArrowRight') {
+      if (nextBtn && !nextBtn.hasAttribute('disabled')) go(nextIn || '');
+    }
   });
+
+  // Gate API for exercises
+  window.__gate = {
+    unlock: function(){
+      markSlideOk();
+      if(isLast){ markSectionDone(); }
+      if(nextBtn){ nextBtn.removeAttribute('disabled'); }
+      const fb = document.getElementById('gatefb');
+      if(fb){ fb.textContent = 'Correct ✅'; }
+    },
+    wrong: function(){
+      const fb = document.getElementById('gatefb');
+      if(fb){ fb.textContent = 'Essaie encore'; }
+    }
+  };
 })();
 </script>
 </script>

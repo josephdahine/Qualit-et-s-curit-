@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>🧱 Le cadre canadien de la qualité des soins</title>
+  <title>Exercice — Associer</title>
   <style>
 :root { --font: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; }
 * { box-sizing: border-box; }
@@ -20,56 +20,137 @@ h3 { font-size: 18px; }
 .table { width: 100%; border-collapse: collapse; }
 .table th, .table td { border-bottom:1px solid #e5e7eb; padding:8px; text-align:left; vertical-align: top; }
 ul { margin: 8px 0 8px 18px; }
-.kbd { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; background:#f3f4f6; padding:2px 6px; border-radius:6px; }
 .btnbar { position: sticky; bottom: 0; left: 0; right: 0; background: rgba(248,250,252,.9); border-top:1px solid #e5e7eb; display:flex; justify-content:space-between; gap:8px; padding:10px 14px; backdrop-filter: blur(6px); }
 .btn { display:inline-flex; align-items:center; gap:8px; padding:10px 14px; border-radius:12px; border:1px solid #e5e7eb; background:#fff; cursor:pointer; text-decoration:none; color:#111827; font-weight:600; }
+.btn[disabled] { opacity:.45; cursor:not-allowed; }
 .btn.primary { background:#111827; color:#fff; border-color:#111827; }
-.btn.muted { color:#6b7280; }
 .small { font-size:12px; color:#6b7280; }
-details { background:#f9fafb; border:1px solid #e5e7eb; padding:10px 12px; border-radius:12px; }
-summary { cursor:pointer; font-weight:700; }
-svg { width:100%; background:#fff; border:1px solid #e5e7eb; border-radius:12px; }
-input[type=text], textarea, select { width:100%; padding:10px; border:1px solid #e5e7eb; border-radius:12px; }
-label { display:block; margin:6px 0; }
-hr { border:0; border-top:1px solid #e5e7eb; margin:16px 0; }
-.center { text-align:center; }
+.lock { background:#fff7ed; border:1px solid #f59e0b; color:#92400e; padding:12px; border-radius:12px; }
+.hidden { display:none; }
+a.disabled { pointer-events:none; opacity:.45; text-decoration:none; }
 </style>
 </head>
 <body>
   <div class="wrap">
-    <div class="card"><span class="badge">🟦 Section 1 – (10 minutes)</span><h1>🧱 Le cadre canadien de la qualité des soins</h1>
-<p>Le Cadre canadien sur la qualité élaboré par Excellence en santé Canada définit la qualité comme une expérience optimale pour les patients, les prestataires et le système.<br>
-Il repose sur six dimensions interdépendantes :</p>
-<ol>
-<li>Sûreté – Réduction des préjudices liés aux soins.</li>
-<li>Efficacité – Fondée sur les meilleures données probantes.</li>
-<li>Centré sur la personne – Aligné sur les valeurs et besoins des usagers.</li>
-<li>Opportunité – Accès rapide au bon soin, au bon moment.</li>
-<li>Efficience – Utilisation judicieuse des ressources.</li>
-<li>Équité – Absence de discrimination ou d’injustice dans les soins.</li>
-</ol>
-<p class="note">🧠 Un bon soin est celui qui maximise ces dimensions — pour tous, en tout temps.</p>
-</div>
+    <div class="card"><span class="badge">Section 01</span><h1>Exercice — Associer</h1>
+    <div id="lock" class="lock hidden">
+      <strong id="lockmsg">Diapo verrouillée.</strong>
+      <div style="margin-top:8px"><a class="btn" href="01-01.html">← Revenir</a></div>
+    </div>
+    <div id="content" class="">
+      
+<div id="quiz" class="note">
+<label>1<select data-answer="D"><option></option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option></select></label>
+<label>2<select data-answer="B"><option></option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option></select></label>
+<label>3<select data-answer="E"><option></option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option></select></label>
+<label>4<select data-answer="C"><option></option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option></select></label>
+<label>5<select data-answer="A"><option></option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option></select></label>
+</div><button class="btn primary" id="check">Valider</button> <span id="gatefb" class="small"></span>
+<script>
+const selects=[...document.querySelectorAll('#quiz select')];
+document.getElementById('check').addEventListener('click',()=>{
+  let ok=0; selects.forEach(s=>{if(s.value===s.dataset.answer){ok++; s.style.borderColor='#10b981';} else s.style.borderColor='#ef4444';});
+  if(ok===5){ window.__gate.unlock(); } else { window.__gate.wrong(); }
+});
+</script>
+
+    </div>
+    </div>
     <div class="btnbar">
       <a class="btn" href="index.html">Sommaire</a>
-      <span class="small">Diapo 2 / 7</span>
+      <span class="small">Diapo 2 / 2</span>
       <div>
         <a class="btn" href="01-01.html">← Précédent</a>
-        <a class="btn primary" href="01-03.html">Suivant →</a>
+        <a class="btn primary" id="next" href="#" disabled>Section terminée</a>
       </div>
     </div>
   </div>
-<script data-prev="01-01.html" data-next="01-03.html">
+<script data-section="01" data-slide="2" data-exercise="1" data-prev="01-01.html" data-next="" data-last="1">
 <script>
 (function() {
-  const meta = document.currentScript.dataset;
-  const prev = meta.prev, next = meta.next;
+  const el = document.currentScript;
+  const meta = el.dataset;
+  const sec = meta.section; // "00","01",...
+  const secNum = parseInt(sec,10);
+  const slide = parseInt(meta.slide,10);
+  const isExercise = meta.exercise === "1";
+  const isLast = meta.last === "1";
+  const prevIn = meta.prev, nextIn = meta.next;
+  const nextBtn = document.getElementById('next');
+  const content = document.getElementById('content');
+  const lock = document.getElementById('lock');
+  const lockMsg = document.getElementById('lockmsg');
+
+  const key = `sec${sec}:${String(slide).padStart(2,'0')}`;
+  const prevKey = slide>1 ? `sec${sec}:${String(slide-1).padStart(2,'0')}` : null;
+  const prevSectionKey = secNum>1 ? `sectionDone:${String(secNum-1).padStart(2,'0')}` : null;
+  const mySectionKey = `sectionDone:${sec}`;
+
   function go(url){ if(url) window.location.href = url; }
+
+  function checkSectionPrereq(){
+    if (!prevSectionKey) return true; // Section 01 libre
+    try{ return localStorage.getItem(prevSectionKey)==='ok'; }catch(e){ return false; }
+  }
+  function checkSlideChain(){
+    if (slide===1) return true;
+    try{ return localStorage.getItem(prevKey)==='ok'; }catch(e){ return false; }
+  }
+  function markSlideOk(){ try{ localStorage.setItem(key,'ok'); }catch(e){} }
+  function markSectionDone(){ try{ localStorage.setItem(mySectionKey,'ok'); }catch(e){} }
+
+  // Block if previous section not completed
+  let prereqOK = checkSectionPrereq();
+  if(!prereqOK){
+    if(lock && lockMsg){
+      lockMsg.textContent = `Section verrouillée. Terminez d’abord la section ${String(secNum-1).padStart(2,'0')}.`;
+      lock.classList.remove('hidden');
+    }
+    if(content){ content.classList.add('hidden'); }
+    if(nextBtn){ nextBtn.setAttribute('disabled','disabled'); }
+    return;
+  }
+
+  // Then chain inside section
+  const chainOK = checkSlideChain();
+  if(!chainOK){
+    if(content){ content.classList.add('hidden'); }
+    if(lock){ lock.classList.remove('hidden'); }
+    if(nextBtn){ nextBtn.setAttribute('disabled','disabled'); }
+  }else{
+    if(content){ content.classList.remove('hidden'); }
+    if(lock){ lock.classList.add('hidden'); }
+    if(!isExercise){
+      markSlideOk();
+      if(isLast){ markSectionDone(); }
+    }else{
+      if(nextBtn){ nextBtn.setAttribute('disabled','disabled'); }
+    }
+  }
+
+  // Keyboard within section
   document.addEventListener('keydown', (e) => {
     if (e.target && (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT')) return;
-    if (e.key === 'ArrowLeft') go(prev);
-    if (e.key === 'ArrowRight') go(next);
+    if (e.key === 'ArrowLeft') go(prevIn || '');
+    if (e.key === 'ArrowRight') {
+      if (nextBtn && !nextBtn.hasAttribute('disabled')) go(nextIn || '');
+    }
   });
+
+  // Gate API for exercises
+  window.__gate = {
+    unlock: function(){
+      markSlideOk();
+      if(isLast){ markSectionDone(); }
+      if(nextBtn){ nextBtn.removeAttribute('disabled'); }
+      const fb = document.getElementById('gatefb');
+      if(fb){ fb.textContent = 'Correct ✅'; }
+    },
+    wrong: function(){
+      const fb = document.getElementById('gatefb');
+      if(fb){ fb.textContent = 'Essaie encore'; }
+    }
+  };
 })();
 </script>
 </script>

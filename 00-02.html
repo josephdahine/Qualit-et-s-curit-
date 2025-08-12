@@ -20,47 +20,122 @@ h3 { font-size: 18px; }
 .table { width: 100%; border-collapse: collapse; }
 .table th, .table td { border-bottom:1px solid #e5e7eb; padding:8px; text-align:left; vertical-align: top; }
 ul { margin: 8px 0 8px 18px; }
-.kbd { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; background:#f3f4f6; padding:2px 6px; border-radius:6px; }
 .btnbar { position: sticky; bottom: 0; left: 0; right: 0; background: rgba(248,250,252,.9); border-top:1px solid #e5e7eb; display:flex; justify-content:space-between; gap:8px; padding:10px 14px; backdrop-filter: blur(6px); }
 .btn { display:inline-flex; align-items:center; gap:8px; padding:10px 14px; border-radius:12px; border:1px solid #e5e7eb; background:#fff; cursor:pointer; text-decoration:none; color:#111827; font-weight:600; }
+.btn[disabled] { opacity:.45; cursor:not-allowed; }
 .btn.primary { background:#111827; color:#fff; border-color:#111827; }
-.btn.muted { color:#6b7280; }
 .small { font-size:12px; color:#6b7280; }
-details { background:#f9fafb; border:1px solid #e5e7eb; padding:10px 12px; border-radius:12px; }
-summary { cursor:pointer; font-weight:700; }
-svg { width:100%; background:#fff; border:1px solid #e5e7eb; border-radius:12px; }
-input[type=text], textarea, select { width:100%; padding:10px; border:1px solid #e5e7eb; border-radius:12px; }
-label { display:block; margin:6px 0; }
-hr { border:0; border-top:1px solid #e5e7eb; margin:16px 0; }
-.center { text-align:center; }
+.lock { background:#fff7ed; border:1px solid #f59e0b; color:#92400e; padding:12px; border-radius:12px; }
+.hidden { display:none; }
+a.disabled { pointer-events:none; opacity:.45; text-decoration:none; }
 </style>
 </head>
 <body>
   <div class="wrap">
     <div class="card"><span class="badge">Introduction</span><h1>Introduction</h1>
-<p>Bienvenue dans ce module d’initiation à la qualité et à la sécurité des soins. L'objectif est de vous donner des outils simples, concrets et utilisables dès vos stages cliniques.</p>
-<p>Tout au long de ce module, nous suivrons l’exemple d’un projet fil conducteur qui guidera nos exercices en lien avec une problématique fictive: améliorer le taux de vaccination contre la grippe chez le personnel de la santé.</p>
-</div>
+    <div id="lock" class="lock hidden">
+      <strong id="lockmsg">Diapo verrouillée.</strong>
+      <div style="margin-top:8px"><a class="btn" href="00-01.html">← Revenir</a></div>
+    </div>
+    <div id="content" class="">
+      <p>Bienvenue…</p>
+    </div>
+    </div>
     <div class="btnbar">
       <a class="btn" href="index.html">Sommaire</a>
       <span class="small">Diapo 2 / 2</span>
       <div>
         <a class="btn" href="00-01.html">← Précédent</a>
-        <a class="btn primary" href="01-01.html">Suivant →</a>
+        <a class="btn primary" id="next" href="#" disabled>Section terminée</a>
       </div>
     </div>
   </div>
-<script data-prev="00-01.html" data-next="01-01.html">
+<script data-section="00" data-slide="2" data-exercise="0" data-prev="00-01.html" data-next="" data-last="1">
 <script>
 (function() {
-  const meta = document.currentScript.dataset;
-  const prev = meta.prev, next = meta.next;
+  const el = document.currentScript;
+  const meta = el.dataset;
+  const sec = meta.section; // "00","01",...
+  const secNum = parseInt(sec,10);
+  const slide = parseInt(meta.slide,10);
+  const isExercise = meta.exercise === "1";
+  const isLast = meta.last === "1";
+  const prevIn = meta.prev, nextIn = meta.next;
+  const nextBtn = document.getElementById('next');
+  const content = document.getElementById('content');
+  const lock = document.getElementById('lock');
+  const lockMsg = document.getElementById('lockmsg');
+
+  const key = `sec${sec}:${String(slide).padStart(2,'0')}`;
+  const prevKey = slide>1 ? `sec${sec}:${String(slide-1).padStart(2,'0')}` : null;
+  const prevSectionKey = secNum>1 ? `sectionDone:${String(secNum-1).padStart(2,'0')}` : null;
+  const mySectionKey = `sectionDone:${sec}`;
+
   function go(url){ if(url) window.location.href = url; }
+
+  function checkSectionPrereq(){
+    if (!prevSectionKey) return true; // Section 01 libre
+    try{ return localStorage.getItem(prevSectionKey)==='ok'; }catch(e){ return false; }
+  }
+  function checkSlideChain(){
+    if (slide===1) return true;
+    try{ return localStorage.getItem(prevKey)==='ok'; }catch(e){ return false; }
+  }
+  function markSlideOk(){ try{ localStorage.setItem(key,'ok'); }catch(e){} }
+  function markSectionDone(){ try{ localStorage.setItem(mySectionKey,'ok'); }catch(e){} }
+
+  // Block if previous section not completed
+  let prereqOK = checkSectionPrereq();
+  if(!prereqOK){
+    if(lock && lockMsg){
+      lockMsg.textContent = `Section verrouillée. Terminez d’abord la section ${String(secNum-1).padStart(2,'0')}.`;
+      lock.classList.remove('hidden');
+    }
+    if(content){ content.classList.add('hidden'); }
+    if(nextBtn){ nextBtn.setAttribute('disabled','disabled'); }
+    return;
+  }
+
+  // Then chain inside section
+  const chainOK = checkSlideChain();
+  if(!chainOK){
+    if(content){ content.classList.add('hidden'); }
+    if(lock){ lock.classList.remove('hidden'); }
+    if(nextBtn){ nextBtn.setAttribute('disabled','disabled'); }
+  }else{
+    if(content){ content.classList.remove('hidden'); }
+    if(lock){ lock.classList.add('hidden'); }
+    if(!isExercise){
+      markSlideOk();
+      if(isLast){ markSectionDone(); }
+    }else{
+      if(nextBtn){ nextBtn.setAttribute('disabled','disabled'); }
+    }
+  }
+
+  // Keyboard within section
   document.addEventListener('keydown', (e) => {
     if (e.target && (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT')) return;
-    if (e.key === 'ArrowLeft') go(prev);
-    if (e.key === 'ArrowRight') go(next);
+    if (e.key === 'ArrowLeft') go(prevIn || '');
+    if (e.key === 'ArrowRight') {
+      if (nextBtn && !nextBtn.hasAttribute('disabled')) go(nextIn || '');
+    }
   });
+
+  // Gate API for exercises
+  window.__gate = {
+    unlock: function(){
+      markSlideOk();
+      if(isLast){ markSectionDone(); }
+      if(nextBtn){ nextBtn.removeAttribute('disabled'); }
+      const fb = document.getElementById('gatefb');
+      if(fb){ fb.textContent = 'Correct ✅'; }
+    },
+    wrong: function(){
+      const fb = document.getElementById('gatefb');
+      if(fb){ fb.textContent = 'Essaie encore'; }
+    }
+  };
 })();
 </script>
 </script>
